@@ -26,7 +26,7 @@ class CustomTableViewCell: UITableViewCell {
     func setMove(move:Movie){
         txtTitleMovie.text = move.title
         txtDuration.text = String(move.durationmin)
-        imageView?.image = move.image
+        imgMovie.image = move.image
         txtDecription.text = move.decription
     
     }
