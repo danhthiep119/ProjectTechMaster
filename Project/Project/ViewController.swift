@@ -8,28 +8,23 @@
 
 import UIKit
 
-class ViewController: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate {
-    let reuseIdentifier = "cell"
-    var items = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+class ViewController: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
     
+    
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    let reuseIdentifier = "cell"
+    var items = [0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2,2,2,2,2, 0, 0, 0, 0, 0, 0, 0, 0]
+    
+    var choose:[String] = []
     var arrData = [String]()
     var arrSelectedIndex = [IndexPath]()
     var arrSelectedData = [String]()
     
+    var check:Bool = false
     
-    
-    @IBOutlet weak var viewTitle: UIView!
-    
-    @IBOutlet weak var viewUser: UIView!
-    
-    @IBOutlet weak var viewPass: UIView!
-        
-    @IBOutlet weak var viewPassRepeat: UIView!
-    
-    @IBOutlet weak var txtDieuKhoan: UITextView!
-    
-    @IBOutlet weak var btnRegister: UIButton!
-    
+    @IBOutlet weak var imgVideo: UIImageView!
+    var img:UIImage?
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.items.count
@@ -38,72 +33,94 @@ class ViewController: UIViewController,UICollectionViewDataSource,UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! CollectionViewCell
-        for index in items
+        for (index, info) in items.enumerated()
         {
-            if index == 0
+            //ghế vip
+            for row in 16...items.count
+            {
+                if indexPath.row == row{
+                    if indexPath.row == index && info != 2{
+                        cell.myImage.image = UIImage(named: "Chair1")
+                        cell.backgroundColor = .purple
+                    }
+                }
+            }
+            // 0 là trạng thái chờ, 1 là đang chọn, 2 là đã được chọn
+            if indexPath.row == index && info == 0
             {
                 cell.myImage.image = UIImage(named: "Chair1")
-                cell.backgroundColor = UIColor.white
             }
-            else if index == 1
+            else if indexPath.row == index && info == 1
             {
                 cell.myImage.image = UIImage(named: "Chair2")
                 cell.backgroundColor = UIColor.gray
             }
+            else if indexPath.row == index && info == 2
+            {
+                cell.myImage.image = UIImage(named: "Chair1")
+                cell.backgroundColor = .yellow
+            }
+            
         }
-        //cell.backgroundColor = UIColor.white
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 5
-        
-        /*if arrSelectedIndex.contains(indexPath) {
-            cell.myImage.image = UIImage(named: "Chair1")
-        }
-        else {
-            cell.myImage.image = UIImage(named: "Chair2")
-        }
-
-            cell.layoutSubviews()*/
-            return cell
+        return cell
         
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
-        cell.myImage.image = UIImage(named: "Chair2")
-        txtSelection.text = "you chose :\(indexPath)"
-    }
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
-        cell.myImage.image = UIImage(named: "Chair1")
+        //kiểm tra trạng thái của ghế đã đk chọn hay chưa
+        if check == false{
+            check = true
+            cell.myImage.image = UIImage(named: "Chair2")
+            choose.append("\(indexPath)")
+            for info in choose
+            {
+                txtSelection.text += info
+            }
+        }
+        else {
+            cell.myImage.image = UIImage(named: "Chair1")
+            check = false
+            for (index,info) in choose.enumerated()
+            {
+                if info == "\(indexPath)"
+                {
+                    if index == 0
+                    {
+                        choose = []
+                    }
+                    // sinh lỗi xoá phần tử thứ 0
+                    choose.remove(at: index)
+                }
+                txtSelection.text = info
+            }
+
+        }
+        //nếu ghế đã được đặt thì ko cho phép đặt trùng
+        for (index, info) in items.enumerated()
+        {
+            if indexPath.row == index && info == 2
+            {
+                cell.myImage.image = UIImage(named: "Chair1")
+                print("Ghế này đã có người đặt")
+            }
+        }
         cell.reloadInputViews()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 100)
+        let size = (collectionView.bounds.width)/9
+        return CGSize(width: size, height: size)
     }
-
-
-    /*func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("You selected cell #\(indexPath.item)!")
-        let strData = arrData[indexPath.item]
-
-        if arrSelectedIndex.contains(indexPath) {
-            arrSelectedIndex = arrSelectedIndex.filter { $0 != indexPath}
-            arrSelectedData = arrSelectedData.filter { $0 != strData}
-        }
-        else {
-            arrSelectedIndex.append(indexPath)
-            arrSelectedData.append(strData)
-        }
-
-        collectionView.reloadData()
-    }*/
 
     @IBOutlet weak var txtSelection: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
+        imgVideo.image = img
+        collectionView.backgroundColor = .gray
     }
 
 
