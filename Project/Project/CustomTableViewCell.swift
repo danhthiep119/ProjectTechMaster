@@ -23,6 +23,7 @@ class CustomTableViewCell: UITableViewCell {
     
     @IBOutlet weak var btnBooking: UIButton!
     
+    
     func setMove(move:Movie){
         txtTitleMovie.text = move.title
         txtDuration.text = String(move.durationmin)
@@ -32,7 +33,10 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     
+    
+    
     @IBAction func btnMore(_ sender: Any) {
+        
     }
     
     

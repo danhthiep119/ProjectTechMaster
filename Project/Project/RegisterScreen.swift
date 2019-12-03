@@ -18,8 +18,8 @@ class RegisterScreen: UIViewController {
     
     @IBOutlet weak var viewPassRepeat: UIView!
     
-    @IBOutlet weak var txtDieuKhoan: UITextView!
     @IBOutlet weak var btnRegister: UIButton!
+    @IBOutlet weak var viewEmail: UIView!
     
     
     override func viewDidLoad() {
@@ -30,12 +30,12 @@ class RegisterScreen: UIViewController {
     
 
         func editLayout(){
-            viewTitle.layer.cornerRadius = self.viewTitle.frame.height/2
-            viewUser.layer.cornerRadius = self.viewUser.frame.height/2
-            viewPass.layer.cornerRadius = self.viewPass.frame.height/2
-            viewPassRepeat.layer.cornerRadius = self.viewPassRepeat.frame.height/2
-            txtDieuKhoan.layer.cornerRadius = self.txtDieuKhoan.frame.height/2
-            btnRegister.layer.cornerRadius = self.btnRegister.frame.height/2
+            viewTitle.layer.cornerRadius = 10
+            viewUser.layer.cornerRadius = 10
+            viewPass.layer.cornerRadius = 10
+            viewPassRepeat.layer.cornerRadius = 10
+            viewEmail.layer.cornerRadius = 10
+            btnRegister.layer.cornerRadius = 10
         }
 
 }
